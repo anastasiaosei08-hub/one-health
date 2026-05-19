@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>One Health — We Are All Connected</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --cream: #f5f0e8;
+    --sage: #4a7c59;
+    --sand: #c9a84c;
+    --slate: #3d5a6e;
+    --light-slate: #e8eff4;
+    --muted: #6b7280;
+    --white: #ffffff;
+    --panel-human: #3d5a6e;
+    --panel-animal: #4a7c59;
+    --panel-env: #7a5c3a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Source Sans 3', sans-serif; background: var(--cream); color: var(--ink); min-height: 100vh; }
+
+  /* LANGUAGE SWITCHER */
+  .lang-bar {
+    background: #2a2a2a;
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    border-bottom: 2px solid var(--sand);
+  }
+  .lang-btn {
+    padding: 13px 32px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: rgba(255,255,255,0.5);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .lang-btn.active {
+    background: var(--sand);
+    color: var(--ink);
+  }
+  .lang-btn:hover:not(.active) { color: white; }
+  .lang-flag { font-size: 18px; }
+
+  /* HEADER */
+  .header {
+    background: var(--ink);
+    color: var(--white);
+    padding: 36px 40px 28px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.02) 20px, rgba(255,255,255,0.02) 40px);
+  }
+  .header-badge {
+    display: inline-block;
+    font-size: 11px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--sand); border: 1px solid var(--sand); padding: 5px 16px; margin-bottom: 18px;
+  }
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 6vw, 72px); font-weight: 900; line-height: 1.05; letter-spacing: -1px; position: relative;
+  }
+  .header h1 span { color: var(--sand); }
+  .header-sub { font-size: clamp(14px, 2vw, 18px); font-weight: 300; color: rgba(255,255,255,0.7); margin-top: 10px; letter-spacing: 1px; }
+
+  /* LISTEN BAR */
+  .listen-bar {
+    background: var(--sand); display: flex; align-items: center; justify-content: center;
+    gap: 14px; padding: 14px 20px; cursor: pointer; transition: background 0.2s; user-select: none;
+  }
+  .listen-bar:hover { background: #b8943e; }
+  .listen-bar .ear-icon { font-size: 22px; }
+  .listen-bar .listen-text { font-weight: 600; font-size: 15px; letter-spacing: 1px; color: var(--ink); }
+  .listen-bar .listen-hint { font-size: 12px; color: rgba(26,26,26,0.65); }
+
+  /* INTRO */
+  .intro { max-width: 820px; margin: 48px auto 0; padding: 0 32px; text-align: center; }
+  .intro-icon { font-size: 52px; margin-bottom: 16px; }
+  .intro p { font-size: clamp(17px, 2.2vw, 22px); line-height: 1.7; color: #2a2a2a; font-weight: 300; }
+  .intro strong { font-weight: 600; color: var(--sage); }
+
+  /* VENN */
+  .venn-section { display: flex; flex-direction: column; align-items: center; padding: 52px 24px 20px; }
+  .venn-label { font-family: 'Playfair Display', serif; font-size: 13px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 28px; }
+  .venn-wrap { position: relative; width: min(380px, 90vw); height: min(380px, 90vw); }
+  .venn-circle {
+    position: absolute; width: 62%; height: 62%; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; flex-direction: column;
+    cursor: pointer; transition: transform 0.25s, filter 0.25s; border: 3px solid rgba(255,255,255,0.4);
+  }
+  .venn-circle:hover { filter: brightness(1.1); }
+  .venn-circle .vc-icon { font-size: clamp(26px, 5vw, 36px); }
+  .venn-circle .vc-label { font-weight: 700; font-size: clamp(11px, 1.6vw, 14px); letter-spacing: 1.5px; text-transform: uppercase; color: white; margin-top: 6px; text-align: center; padding: 0 6px; text-shadow: 0 1px 4px rgba(0,0,0,0.3); }
+  .vc-human { background: rgba(61,90,110,0.82); top: 0; left: 50%; transform: translateX(-50%); }
+  .vc-human:hover { transform: translateX(-50%) scale(1.07); }
+  .vc-animal { background: rgba(74,124,89,0.82); bottom: 0; left: 3%; }
+  .vc-animal:hover { transform: scale(1.07); }
+  .vc-env { background: rgba(122,92,58,0.82); bottom: 0; right: 3%; }
+  .vc-env:hover { transform: scale(1.07); }
+  .venn-center {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -42%);
+    background: var(--sand); border-radius: 50%; width: 22%; height: 22%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: clamp(16px, 3vw, 22px); box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+    border: 3px solid white; cursor: pointer; transition: transform 0.25s; z-index: 10;
+  }
+  .venn-center:hover { transform: translate(-50%, -42%) scale(1.12); }
+
+  /* PILLARS */
+  .pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0; margin: 48px 0 0; }
+  .pillar { padding: 40px 36px; cursor: pointer; transition: filter 0.2s; position: relative; overflow: hidden; }
+  .pillar:hover { filter: brightness(1.06); }
+  .pillar-human { background: var(--panel-human); color: white; }
+  .pillar-animal { background: var(--panel-animal); color: white; }
+  .pillar-env { background: var(--panel-env); color: white; }
+  .pillar-icon-wrap { width: 64px; height: 64px; background: rgba(255,255,255,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; margin-bottom: 20px; }
+  .pillar h2 { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; margin-bottom: 12px; }
+  .pillar p { font-size: 15px; line-height: 1.65; opacity: 0.88; font-weight: 300; }
+  .pillar .speak-btn { display: inline-flex; align-items: center; gap: 7px; margin-top: 20px; background: rgba(255,255,255,0.18); border: 1.5px solid rgba(255,255,255,0.35); color: white; padding: 8px 16px; font-size: 13px; font-weight: 600; letter-spacing: 0.5px; border-radius: 2px; cursor: pointer; transition: background 0.2s; }
+  .pillar .speak-btn:hover { background: rgba(255,255,255,0.28); }
+
+  /* CONNECTIONS */
+  .connections { background: var(--ink); color: white; padding: 56px 40px; text-align: center; }
+  .connections h2 { font-family: 'Playfair Display', serif; font-size: clamp(26px, 4vw, 42px); font-weight: 700; margin-bottom: 10px; }
+  .connections .sub { color: rgba(255,255,255,0.55); font-size: 14px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 44px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; max-width: 1000px; margin: 0 auto; }
+  .card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); padding: 28px 24px; text-align: left; cursor: pointer; transition: background 0.2s, border-color 0.2s; }
+  .card:hover { background: rgba(255,255,255,0.1); border-color: var(--sand); }
+  .card-icon { font-size: 36px; margin-bottom: 14px; }
+  .card h3 { font-family: 'Playfair Display', serif; font-size: 18px; margin-bottom: 8px; color: var(--sand); }
+  .card p { font-size: 14px; line-height: 1.6; color: rgba(255,255,255,0.72); }
+  .card .play-hint { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 14px; display: flex; align-items: center; gap: 5px; }
+
+  /* CTA */
+  .cta { background: var(--light-slate); padding: 56px 40px; text-align: center; }
+  .cta h2 { font-family: 'Playfair Display', serif; font-size: clamp(22px, 3.5vw, 36px); font-weight: 900; margin-bottom: 14px; color: var(--ink); }
+  .cta p { font-size: 16px; color: var(--muted); max-width: 560px; margin: 0 auto 32px; line-height: 1.7; }
+  .actions { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
+  .action-item { background: white; border: 1.5px solid #ddd; padding: 18px 28px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s; font-size: 15px; font-weight: 600; color: var(--ink); }
+  .action-item:hover { border-color: var(--sage); box-shadow: 0 4px 16px rgba(74,124,89,0.15); }
+  .action-item .ai { font-size: 26px; }
+
+  /* QR */
+  .qr-section { background: var(--cream); border-top: 1px solid #ddd; padding: 56px 40px; }
+  .qr-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; gap: 56px; flex-wrap: wrap; justify-content: center; }
+  .qr-text { flex: 1; min-width: 260px; }
+  .qr-badge { font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--sage); margin-bottom: 14px; }
+  .qr-text h2 { font-family: 'Playfair Display', serif; font-size: clamp(22px, 3vw, 32px); font-weight: 700; margin-bottom: 12px; color: var(--ink); }
+  .qr-text p { font-size: 15px; line-height: 1.7; color: var(--muted); margin-bottom: 24px; }
+  .share-steps { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+  .share-step { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 600; color: var(--ink); }
+  .ss-num { width: 28px; height: 28px; background: var(--ink); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+  .qr-speak-btn { background: var(--sage); color: white; border: none; padding: 12px 22px; font-size: 14px; font-weight: 600; cursor: pointer; border-radius: 2px; transition: background 0.2s; }
+  .qr-speak-btn:hover { background: #3a6347; }
+  .qr-box { background: white; border: 2px solid var(--ink); padding: 24px 24px 18px; display: flex; flex-direction: column; align-items: center; gap: 10px; box-shadow: 6px 6px 0px var(--ink); }
+  .qr-label-top { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); }
+  .qr-label-bottom { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; color: var(--ink); text-align: center; }
+  .qr-sublabel { font-size: 11px; color: var(--muted); text-align: center; }
+  #qrCanvas { display: block; }
+
+  /* FOOTER */
+  footer { background: var(--ink); color: rgba(255,255,255,0.45); padding: 28px 40px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; font-size: 12px; letter-spacing: 0.5px; }
+  footer strong { color: var(--sand); }
+
+  /* SPEAKING INDICATOR */
+  .speaking-indicator { position: fixed; bottom: 24px; right: 24px; background: var(--ink); color: white; padding: 12px 20px; border-radius: 2px; display: none; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; box-shadow: 0 8px 32px rgba(0,0,0,0.3); z-index: 1000; border-left: 3px solid var(--sand); }
+  .speaking-indicator.active { display: flex; }
+  .wave { display: flex; align-items: center; gap: 3px; }
+  .wave span { display: block; width: 3px; height: 14px; background: var(--sand); border-radius: 2px; animation: wave 0.8s ease-in-out infinite; }
+  .wave span:nth-child(2) { animation-delay: 0.15s; }
+  .wave span:nth-child(3) { animation-delay: 0.3s; }
+  .wave span:nth-child(4) { animation-delay: 0.45s; }
+  @keyframes wave { 0%, 100% { transform: scaleY(0.4); } 50% { transform: scaleY(1.2); } }
+  .stop-btn { margin-left: 8px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); color: white; padding: 4px 10px; font-size: 11px; cursor: pointer; border-radius: 2px; }
+
+  @media (max-width: 600px) {
+    .header { padding: 28px 20px 22px; }
+    .pillars { grid-template-columns: 1fr; }
+    .connections { padding: 40px 20px; }
+    .cta { padding: 40px 20px; }
+    .qr-section { padding: 40px 20px; }
+    .qr-inner { gap: 32px; }
+    footer { flex-direction: column; text-align: center; }
+    .venn-wrap { width: min(320px, 88vw); height: min(320px, 88vw); }
+    .lang-btn { padding: 13px 20px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LANGUAGE SWITCHER -->
+<div class="lang-bar">
+  <button class="lang-btn active" id="btnEN" onclick="setLang('en')">
+    <span class="lang-flag">🇬🇧</span> English
+  </button>
+  <button class="lang-btn" id="btnFR" onclick="setLang('fr')">
+    <span class="lang-flag">🇫🇷</span> Français
+  </button>
+</div>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-badge" id="hBadge">One Health Initiative</div>
+  <h1 id="hTitle">We Are All<br><span>Connected</span></h1>
+  <p class="header-sub" id="hSub">Human Health · Animal Health · Environmental Health</p>
+</header>
+
+<!-- LISTEN BAR -->
+<div class="listen-bar" onclick="speakText('welcome')">
+  <span class="ear-icon">🔊</span>
+  <span class="listen-text" id="listenText">LISTEN TO THIS POSTER</span>
+  <span class="listen-hint" id="listenHint">— Tap to hear everything explained</span>
+</div>
+
+<!-- INTRO -->
+<section class="intro">
+  <div class="intro-icon">🌍</div>
+  <p id="introText">
+    <strong>One Health</strong> is a global approach that recognises the health of
+    <strong>humans</strong>, <strong>animals</strong>, and our <strong>environment</strong>
+    are deeply linked. When one is sick, the others suffer too.
+    Together, we can protect all three.
+  </p>
+</section>
+
+<!-- VENN DIAGRAM -->
+<section class="venn-section">
+  <div class="venn-label" id="vennLabel">The Three Circles of One Health</div>
+  <div class="venn-wrap">
+    <div class="venn-circle vc-human" onclick="speakText('human')">
+      <span class="vc-icon">👤</span>
+      <span class="vc-label" id="vHuman">Human<br>Health</span>
+    </div>
+    <div class="venn-circle vc-animal" onclick="speakText('animal')">
+      <span class="vc-icon">🐄</span>
+      <span class="vc-label" id="vAnimal">Animal<br>Health</span>
+    </div>
+    <div class="venn-circle vc-env" onclick="speakText('environment')">
+      <span class="vc-icon">🌿</span>
+      <span class="vc-label" id="vEnv">Environ-<br>ment</span>
+    </div>
+    <div class="venn-center" onclick="speakText('center')">❤️</div>
+  </div>
+</section>
+
+<!-- THREE PILLARS -->
+<section class="pillars">
+  <div class="pillar pillar-human">
+    <div class="pillar-icon-wrap">👤</div>
+    <h2 id="p1title">Human Health</h2>
+    <p id="p1text">People stay healthy when the animals around them are healthy and the air, water, and land are clean. Many diseases — like flu, COVID-19, and Ebola — started in animals and spread to humans. Doctors and community health workers must work together with vets and environmentalists.</p>
+    <button class="speak-btn" onclick="speakText('human')">🔊 <span class="listenWord">Listen</span></button>
+  </div>
+  <div class="pillar pillar-animal">
+    <div class="pillar-icon-wrap">🐄</div>
+    <h2 id="p2title">Animal Health</h2>
+    <p id="p2text">Animals — both wild and domestic — carry diseases that can move to humans. When livestock are sick, families lose food and income. Vaccinating animals, stopping illegal wildlife trade, and keeping farm conditions clean protects both animals and the people who live near them.</p>
+    <button class="speak-btn" onclick="speakText('animal')">🔊 <span class="listenWord">Listen</span></button>
+  </div>
+  <div class="pillar pillar-env">
+    <div class="pillar-icon-wrap">🌿</div>
+    <h2 id="p3title">Environment</h2>
+    <p id="p3text">Forests, rivers, soil, and air are the foundation of all life. When we destroy forests, pollute water, or change the climate, wild animals move closer to people — and diseases spread more easily. A healthy planet keeps humans and animals healthy too.</p>
+    <button class="speak-btn" onclick="speakText('environment')">🔊 <span class="listenWord">Listen</span></button>
+  </div>
+</section>
+
+<!-- CONNECTIONS -->
+<section class="connections">
+  <p class="sub" id="examplesLabel">Real examples</p>
+  <h2 id="examplesTitle">How They Connect in Real Life</h2>
+  <div class="cards">
+    <div class="card" onclick="speakText('ebola')">
+      <div class="card-icon">🦇</div>
+      <h3 id="c1title">Ebola</h3>
+      <p id="c1text">Ebola virus lives in bats. When people hunt or eat infected animals in forests, the disease spreads to humans. Protecting forests reduced outbreaks.</p>
+      <div class="play-hint" id="c1hint">▶ Tap to hear this story</div>
+    </div>
+    <div class="card" onclick="speakText('flu')">
+      <div class="card-icon">🐓</div>
+      <h3 id="c2title">Bird Flu</h3>
+      <p id="c2text">Bird flu spreads from chickens to people at live animal markets. Good hygiene, animal checks, and quick reporting stops it spreading further.</p>
+      <div class="play-hint" id="c2hint">▶ Tap to hear this story</div>
+    </div>
+    <div class="card" onclick="speakText('water')">
+      <div class="card-icon">💧</div>
+      <h3 id="c3title">Dirty Water</h3>
+      <p id="c3text">When animal waste enters rivers, people who drink or bathe in that water get sick. Clean water protects communities, animals, and ecosystems together.</p>
+      <div class="play-hint" id="c3hint">▶ Tap to hear this story</div>
+    </div>
+    <div class="card" onclick="speakText('amr')">
+      <div class="card-icon">💊</div>
+      <h3 id="c4title">Antibiotic Resistance</h3>
+      <p id="c4text">When farmers overuse antibiotics in animals, bacteria become resistant. Those same resistant bacteria can then infect people and be very hard to treat.</p>
+      <div class="play-hint" id="c4hint">▶ Tap to hear this story</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <h2 id="ctaTitle">What Can We Do?</h2>
+  <p id="ctaText">Every person, every community can take simple steps to protect human, animal, and environmental health together.</p>
+  <div class="actions">
+    <div class="action-item" onclick="speakText('action1')"><span class="ai">🧼</span> <span id="a1">Wash hands often</span></div>
+    <div class="action-item" onclick="speakText('action2')"><span class="ai">🐾</span> <span id="a2">Vaccinate your animals</span></div>
+    <div class="action-item" onclick="speakText('action3')"><span class="ai">🌳</span> <span id="a3">Do not cut forests</span></div>
+    <div class="action-item" onclick="speakText('action4')"><span class="ai">🗑️</span> <span id="a4">Dispose of waste safely</span></div>
+    <div class="action-item" onclick="speakText('action5')"><span class="ai">📢</span> <span id="a5">Report sick animals</span></div>
+    <div class="action-item" onclick="speakText('action6')"><span class="ai">🤝</span> <span id="a6">Work across sectors</span></div>
+  </div>
+</section>
+
+<!-- QR -->
+<section class="qr-section">
+  <div class="qr-inner">
+    <div class="qr-text">
+      <div class="qr-badge" id="qrBadge">Share This Poster</div>
+      <h2 id="qrTitle">Give It to Your Community</h2>
+      <p id="qrText">Send this poster to anyone via WhatsApp, Bluetooth, or USB stick. It works on any phone — no internet needed once downloaded.</p>
+      <div class="share-steps">
+        <div class="share-step"><span class="ss-num">1</span> <span id="step1">Download the file to your phone</span></div>
+        <div class="share-step"><span class="ss-num">2</span> <span id="step2">Send via WhatsApp or Bluetooth</span></div>
+        <div class="share-step"><span class="ss-num">3</span> <span id="step3">They open it — tap Listen — done</span></div>
+      </div>
+      <button class="qr-speak-btn" onclick="speakText('share')" id="qrSpeakBtn">🔊 How to share this poster</button>
+    </div>
+    <div class="qr-box">
+      <div class="qr-label-top" id="qrScan">SCAN TO SHARE</div>
+      <canvas id="qrCanvas"></canvas>
+      <div class="qr-label-bottom">One Health Poster</div>
+      <div class="qr-sublabel" id="qrCamera">Point your phone camera at this code</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div><strong>One Health</strong> — A Global Framework<br>WHO · FAO · UNEP · WOAH</div>
+  <div>🔊 <span id="footerAudio">This poster includes audio for everyone</span></div>
+  <div>Group Project · Health Promotion · 2026</div>
+</footer>
+
+<!-- SPEAKING INDICATOR -->
+<div class="speaking-indicator" id="speakingIndicator">
+  <div class="wave"><span></span><span></span><span></span><span></span></div>
+  <span id="speakingLabel">Speaking…</span>
+  <button class="stop-btn" onclick="stopSpeaking()">■ Stop</button>
+</div>
+
+<script>
+// ─── CONTENT ────────────────────────────────────────────────────────────────
+const content = {
+  en: {
+    lang: 'en-GB',
+    hBadge: 'One Health Initiative',
+    hTitle: 'We Are All<br><span>Connected</span>',
+    hSub: 'Human Health · Animal Health · Environmental Health',
+    listenText: 'LISTEN TO THIS POSTER',
+    listenHint: '— Tap to hear everything explained',
+    introText: '<strong>One Health</strong> is a global approach that recognises the health of <strong>humans</strong>, <strong>animals</strong>, and our <strong>environment</strong> are deeply linked. When one is sick, the others suffer too. Together, we can protect all three.',
+    vennLabel: 'The Three Circles of One Health',
+    vHuman: 'Human<br>Health', vAnimal: 'Animal<br>Health', vEnv: 'Environ-<br>ment',
+    p1title: 'Human Health',
+    p1text: 'People stay healthy when the animals around them are healthy and the air, water, and land are clean. Many diseases — like flu, COVID-19, and Ebola — started in animals and spread to humans. Doctors and community health workers must work together with vets and environmentalists.',
+    p2title: 'Animal Health',
+    p2text: 'Animals — both wild and domestic — carry diseases that can move to humans. When livestock are sick, families lose food and income. Vaccinating animals, stopping illegal wildlife trade, and keeping farm conditions clean protects both animals and the people who live near them.',
+    p3title: 'Environment',
+    p3text: 'Forests, rivers, soil, and air are the foundation of all life. When we destroy forests, pollute water, or change the climate, wild animals move closer to people — and diseases spread more easily. A healthy planet keeps humans and animals healthy too.',
+    examplesLabel: 'Real examples',
+    examplesTitle: 'How They Connect in Real Life',
+    c1title: 'Ebola', c1text: 'Ebola virus lives in bats. When people hunt or eat infected animals in forests, the disease spreads to humans. Protecting forests reduced outbreaks.', c1hint: '▶ Tap to hear this story',
+    c2title: 'Bird Flu', c2text: 'Bird flu spreads from chickens to people at live animal markets. Good hygiene, animal checks, and quick reporting stops it spreading further.', c2hint: '▶ Tap to hear this story',
+    c3title: 'Dirty Water', c3text: 'When animal waste enters rivers, people who drink or bathe in that water get sick. Clean water protects communities, animals, and ecosystems together.', c3hint: '▶ Tap to hear this story',
+    c4title: 'Antibiotic Resistance', c4text: 'When farmers overuse antibiotics in animals, bacteria become resistant. Those same resistant bacteria can then infect people and be very hard to treat.', c4hint: '▶ Tap to hear this story',
+    ctaTitle: 'What Can We Do?',
+    ctaText: 'Every person, every community can take simple steps to protect human, animal, and environmental health together.',
+    a1:'Wash hands often', a2:'Vaccinate your animals', a3:'Do not cut forests', a4:'Dispose of waste safely', a5:'Report sick animals', a6:'Work across sectors',
+    listenWord: 'Listen',
+    qrBadge: 'Share This Poster', qrTitle: 'Give It to Your Community',
+    qrText: 'Send this poster to anyone via WhatsApp, Bluetooth, or USB stick. It works on any phone — no internet needed once downloaded.',
+    step1: 'Download the file to your phone', step2: 'Send via WhatsApp or Bluetooth', step3: 'They open it — tap Listen — done',
+    qrSpeakBtn: '🔊 How to share this poster', qrScan: 'SCAN TO SHARE', qrCamera: 'Point your phone camera at this code',
+    footerAudio: 'This poster includes audio for everyone',
+    scripts: {
+      welcome: `Welcome to the One Health Poster. One Health is an approach that understands that the health of people, animals, and the environment are all connected. When one is in trouble, the others are affected too. Tap on any section to hear it explained. Human health depends on healthy animals and a clean environment. Animal health affects whether diseases spread to people. And our environment — forests, rivers, clean air — is what keeps everything alive. Together, doctors, veterinarians, and environmental scientists must work as one team.`,
+      human: `Human Health. People stay healthy when the animals around them are healthy and when the air, water, and land are clean. Many diseases that affect humans today started in animals. Ebola came from bats. COVID-19 likely came from animals. The flu comes from birds and pigs. This is why doctors cannot work alone. They must partner with animal doctors and people who protect the environment. When we take care of animals and nature, we are also taking care of ourselves.`,
+      animal: `Animal Health. Animals — both wild animals like bats and birds, and domestic animals like cows, goats, and chickens — can carry diseases that spread to humans. When livestock are sick, families lose their food, their income, and their livelihoods. Vaccinating animals, stopping the illegal trade of wild animals, and keeping farm conditions clean protects both the animals and the people who live near them.`,
+      environment: `The Environment. Forests, rivers, clean soil, and fresh air are the foundation of all life on Earth. When we destroy forests, pollute rivers, or change the climate, wild animals are forced to move closer to where people live. When animals and people live too close together in stressed environments, diseases spread more easily. Protecting forests and keeping the environment clean is essential for human health.`,
+      center: `The Heart of One Health. At the centre where human health, animal health, and the environment all overlap is the most important idea. These three cannot be separated. A disease in an animal can become a disease in a person. A polluted river harms fish, animals, and people who drink from it. One Health means tackling all three together — because that is the only way to truly protect everyone.`,
+      ebola: `Ebola and Bats. The Ebola virus lives naturally in bats in tropical forests. When people hunt bats for food, or when bats contact other animals that people eat, the Ebola virus can jump to humans. Once in a human, it spreads quickly and can be deadly. Protecting forests so bats stay away from communities, and educating people about safe food practices, helps stop outbreaks. Protecting nature protects us.`,
+      flu: `Bird Flu and Chickens. Bird flu is a virus that lives in birds like ducks and chickens. At live animal markets, the virus can spread from birds to people. Good hygiene, regular health checks for birds, and quickly reporting sick animals can stop the disease from spreading. This is a perfect example of why animal health and human health are one and the same.`,
+      water: `Dirty Water and Disease. When animal waste from farms enters rivers, it carries dangerous bacteria and parasites. People who drink from these rivers, or bathe in them, can become seriously ill. Children are especially at risk. Farmers managing waste properly, governments providing clean water, and communities learning safe water use — all working together — is the One Health solution.`,
+      amr: `Antibiotic Resistance. When farmers give too many antibiotics to their animals, the bacteria change and become resistant. These resistant bacteria can then spread to people through food or water. When people get sick with resistant bacteria, antibiotics no longer work. Using antibiotics carefully, in both humans and animals, is a One Health priority.`,
+      action1: `Wash your hands often — especially after touching animals, before eating, and after using the toilet. Handwashing is one of the simplest and most powerful ways to stop diseases from spreading.`,
+      action2: `Vaccinate your animals. When you vaccinate your livestock and pets, you protect them and your family too. Many animal diseases can spread to people. Talk to your local veterinarian about the right vaccines.`,
+      action3: `Do not cut forests. Forests are home to wild animals. When we clear forests, those animals move closer to villages, bringing their diseases with them. Keeping forests intact prevents new diseases from spreading.`,
+      action4: `Dispose of waste safely. Animal and human waste that is not managed properly pollutes water and spreads disease. Use latrines, manage animal manure, and keep living areas clean.`,
+      action5: `Report sick animals immediately. If your animals are behaving strangely or dying suddenly, report it to your local animal health officer right away. Early reporting can stop a small problem from becoming a dangerous outbreak.`,
+      action6: `Work across sectors. One Health needs doctors, veterinarians, farmers, teachers, government officials, and community members all working together. When we share information and cooperate, we can prevent disease before it starts.`,
+      share: `How to share this poster. This poster is a single file that works on any phone. Via WhatsApp: tap the attachment button, choose Document, and select this file. Via Bluetooth: turn on Bluetooth on both phones, pair them, and send the file. Via USB stick: copy the file and plug into any phone or laptop. No internet is needed. Anyone who receives this file can open it and listen to the full One Health message.`
+    }
+  },
+  fr: {
+    lang: 'fr-FR',
+    hBadge: 'Initiative Une Seule Santé',
+    hTitle: 'Nous Sommes Tous<br><span>Connectés</span>',
+    hSub: 'Santé Humaine · Santé Animale · Santé Environnementale',
+    listenText: 'ÉCOUTER CETTE AFFICHE',
+    listenHint: '— Appuyez pour tout entendre expliqué',
+    introText: '<strong>Une Seule Santé</strong> est une approche mondiale qui reconnaît que la santé des <strong>humains</strong>, des <strong>animaux</strong> et de notre <strong>environnement</strong> sont profondément liées. Quand l\'un souffre, les autres en pâtissent aussi. Ensemble, nous pouvons protéger les trois.',
+    vennLabel: 'Les Trois Cercles d\'Une Seule Santé',
+    vHuman: 'Santé<br>Humaine', vAnimal: 'Santé<br>Animale', vEnv: 'Environ-<br>nement',
+    p1title: 'Santé Humaine',
+    p1text: 'Les personnes restent en bonne santé lorsque les animaux qui les entourent sont sains et que l\'air, l\'eau et la terre sont propres. De nombreuses maladies comme la grippe, le COVID-19 et Ebola ont commencé chez les animaux avant de se propager aux humains.',
+    p2title: 'Santé Animale',
+    p2text: 'Les animaux — sauvages et domestiques — portent des maladies qui peuvent se transmettre aux humains. Quand le bétail est malade, les familles perdent nourriture et revenus. Vacciner les animaux et maintenir des fermes propres protège à la fois les animaux et les communautés.',
+    p3title: 'Environnement',
+    p3text: 'Les forêts, les rivières, le sol et l\'air sont le fondement de toute vie. Quand nous détruisons les forêts ou polluons l\'eau, les animaux sauvages se rapprochent des hommes et les maladies se propagent plus facilement. Une planète saine maintient humains et animaux en bonne santé.',
+    examplesLabel: 'Exemples réels',
+    examplesTitle: 'Comment Ils Se Connectent dans la Vie Réelle',
+    c1title: 'Ebola', c1text: 'Le virus Ebola vit dans les chauves-souris. Quand les gens chassent ou mangent des animaux infectés en forêt, la maladie se propage aux humains.', c1hint: '▶ Appuyez pour entendre cette histoire',
+    c2title: 'Grippe Aviaire', c2text: 'La grippe aviaire se propage des poulets aux humains dans les marchés d\'animaux vivants. Une bonne hygiène et des signalements rapides stoppent la propagation.', c2hint: '▶ Appuyez pour entendre cette histoire',
+    c3title: 'Eau Sale', c3text: 'Quand les déchets animaux entrent dans les rivières, les personnes qui boivent ou se baignent dans cette eau tombent malades. L\'eau propre protège tout le monde.', c3hint: '▶ Appuyez pour entendre cette histoire',
+    c4title: 'Résistance aux Antibiotiques', c4text: 'Quand les agriculteurs abusent des antibiotiques pour les animaux, les bactéries deviennent résistantes et peuvent ensuite infecter les humains.', c4hint: '▶ Appuyez pour entendre cette histoire',
+    ctaTitle: 'Que Pouvons-Nous Faire ?',
+    ctaText: 'Chaque personne, chaque communauté peut prendre des mesures simples pour protéger ensemble la santé humaine, animale et environnementale.',
+    a1:'Se laver les mains souvent', a2:'Vacciner vos animaux', a3:'Ne pas couper les forêts', a4:'Éliminer les déchets correctement', a5:'Signaler les animaux malades', a6:'Travailler ensemble',
+    listenWord: 'Écouter',
+    qrBadge: 'Partager Cette Affiche', qrTitle: 'Donnez-la à Votre Communauté',
+    qrText: 'Envoyez cette affiche via WhatsApp, Bluetooth ou clé USB. Elle fonctionne sur tout téléphone — sans internet une fois téléchargée.',
+    step1: 'Téléchargez le fichier sur votre téléphone', step2: 'Envoyez via WhatsApp ou Bluetooth', step3: 'Ils l\'ouvrent — appuient sur Écouter — c\'est fait',
+    qrSpeakBtn: '🔊 Comment partager cette affiche', qrScan: 'SCANNER POUR PARTAGER', qrCamera: 'Pointez la caméra de votre téléphone sur ce code',
+    footerAudio: 'Cette affiche inclut l\'audio pour tout le monde',
+    scripts: {
+      welcome: `Bienvenue sur l'affiche Une Seule Santé. Cette approche comprend que la santé des personnes, des animaux et de l'environnement sont toutes connectées. Quand l'un est en difficulté, les autres en souffrent aussi. Appuyez sur n'importe quelle section pour l'entendre expliquée. La santé humaine dépend d'animaux sains et d'un environnement propre. La santé animale affecte la propagation des maladies aux humains. Et notre environnement — forêts, rivières, air pur — est ce qui maintient tout en vie. Ensemble, médecins, vétérinaires et scientifiques de l'environnement doivent travailler en équipe.`,
+      human: `Santé Humaine. Les personnes restent en bonne santé lorsque les animaux autour d'elles sont sains et que l'air, l'eau et la terre sont propres. Ebola vient des chauves-souris. Le COVID-19 vient probablement des animaux. La grippe vient des oiseaux et des porcs. C'est pourquoi les médecins ne peuvent pas travailler seuls. Ils doivent collaborer avec les médecins vétérinaires et les protecteurs de l'environnement. Quand nous prenons soin des animaux et de la nature, nous prenons aussi soin de nous-mêmes.`,
+      animal: `Santé Animale. Les animaux — sauvages comme les chauves-souris et les oiseaux, et domestiques comme les vaches, les chèvres et les poulets — peuvent transporter des maladies qui se propagent aux humains. Quand le bétail est malade, les familles perdent leur nourriture et leurs revenus. Vacciner les animaux, arrêter le commerce illégal de la faune sauvage et maintenir des conditions d'élevage propres protège à la fois les animaux et les communautés voisines.`,
+      environment: `L'Environnement. Les forêts, les rivières, la terre propre et l'air frais sont le fondement de toute vie sur Terre. Quand nous détruisons les forêts, polluons les rivières ou modifions le climat, les animaux sauvages sont forcés de se rapprocher des zones habitées. Quand animaux et humains vivent trop près les uns des autres dans des environnements dégradés, les maladies se propagent plus facilement. Protéger l'environnement est essentiel pour la santé humaine.`,
+      center: `Le Cœur d'Une Seule Santé. Au centre où la santé humaine, animale et l'environnement se chevauchent se trouve l'idée la plus importante. Ces trois éléments ne peuvent pas être séparés. Une maladie chez un animal peut devenir une maladie chez une personne. Une rivière polluée nuit aux poissons, aux animaux et aux personnes qui en boivent. Une Seule Santé signifie s'attaquer aux trois ensemble — car c'est la seule façon de vraiment protéger tout le monde.`,
+      ebola: `Ebola et les Chauves-souris. Le virus Ebola vit naturellement dans les chauves-souris des forêts tropicales. Quand les gens chassent des chauves-souris pour se nourrir, le virus Ebola peut sauter aux humains. Une fois chez un humain, il se propage rapidement et peut être mortel. Protéger les forêts pour que les chauves-souris restent loin des communautés, et éduquer les gens sur les pratiques alimentaires sûres, aide à stopper les épidémies.`,
+      flu: `La Grippe Aviaire. La grippe aviaire est un virus qui vit normalement dans les oiseaux comme les canards et les poulets. Dans les marchés d'animaux vivants, le virus peut se propager des oiseaux aux personnes. Une bonne hygiène, des contrôles réguliers de santé des oiseaux et le signalement rapide des animaux malades peuvent arrêter la propagation de la maladie.`,
+      water: `L'Eau Sale et la Maladie. Quand les déchets animaux des fermes entrent dans les rivières, ils transportent des bactéries et parasites dangereux. Les personnes qui boivent de ces rivières, ou s'y baignent, peuvent tomber gravement malades. Les enfants sont particulièrement à risque. La solution nécessite que tout le monde travaille ensemble : agriculteurs, gouvernements et communautés.`,
+      amr: `La Résistance aux Antibiotiques. Quand les agriculteurs donnent trop d'antibiotiques à leurs animaux, les bactéries changent et deviennent résistantes. Ces bactéries résistantes peuvent ensuite se propager aux personnes par la nourriture ou l'eau. Quand les personnes tombent malades avec des bactéries résistantes, les antibiotiques ne fonctionnent plus. Utiliser les antibiotiques avec précaution, chez les humains et les animaux, est une priorité d'Une Seule Santé.`,
+      action1: `Lavez-vous souvent les mains — surtout après avoir touché des animaux, avant de manger et après avoir utilisé les toilettes. Le lavage des mains est l'un des moyens les plus simples et les plus puissants pour stopper la propagation des maladies.`,
+      action2: `Vaccinez vos animaux. Quand vous vaccinez votre bétail et vos animaux domestiques, vous les protégez et protégez aussi votre famille. De nombreuses maladies animales peuvent se transmettre aux personnes.`,
+      action3: `Ne coupez pas les forêts. Les forêts abritent des millions d'animaux sauvages. Quand nous défrichons les forêts, ces animaux se rapprochent de nos villages, apportant leurs maladies avec eux.`,
+      action4: `Éliminez les déchets correctement. Les déchets animaux et humains mal gérés polluent l'eau et propagent des maladies. Utilisez des latrines, gérez correctement le fumier et gardez les zones de vie propres.`,
+      action5: `Signalez immédiatement les animaux malades. Si vos animaux se comportent étrangement ou meurent soudainement, signalez-le immédiatement à votre agent de santé animale local. Un signalement précoce peut stopper un petit problème avant qu'il ne devienne une épidémie dangereuse.`,
+      action6: `Travaillez ensemble. Une Seule Santé a besoin de médecins, de vétérinaires, d'agriculteurs, d'enseignants, de fonctionnaires et de membres de la communauté travaillant tous ensemble. Quand nous partageons les informations et coopérons, nous pouvons prévenir les maladies avant qu'elles ne commencent.`,
+      share: `Comment partager cette affiche. Via WhatsApp : appuyez sur le bouton pièce jointe, choisissez Document et sélectionnez ce fichier. Via Bluetooth : activez le Bluetooth sur les deux téléphones, associez-les et envoyez le fichier. Via clé USB : copiez le fichier et branchez-le sur n'importe quel téléphone ou ordinateur. Aucune connexion internet n'est nécessaire. Toute personne qui reçoit ce fichier peut l'ouvrir et écouter le message d'Une Seule Santé.`
+    }
+  }
+};
+
+// ─── LANGUAGE STATE ──────────────────────────────────────────────────────────
+let currentLang = 'en';
+
+function setLang(lang) {
+  currentLang = lang;
+  const c = content[lang];
+
+  // Update buttons
+  document.getElementById('btnEN').classList.toggle('active', lang === 'en');
+  document.getElementById('btnFR').classList.toggle('active', lang === 'fr');
+
+  // Update all text
+  document.getElementById('hBadge').textContent = c.hBadge;
+  document.getElementById('hTitle').innerHTML = c.hTitle;
+  document.getElementById('hSub').textContent = c.hSub;
+  document.getElementById('listenText').textContent = c.listenText;
+  document.getElementById('listenHint').textContent = c.listenHint;
+  document.getElementById('introText').innerHTML = c.introText;
+  document.getElementById('vennLabel').textContent = c.vennLabel;
+  document.getElementById('vHuman').innerHTML = c.vHuman;
+  document.getElementById('vAnimal').innerHTML = c.vAnimal;
+  document.getElementById('vEnv').innerHTML = c.vEnv;
+  document.getElementById('p1title').textContent = c.p1title;
+  document.getElementById('p1text').textContent = c.p1text;
+  document.getElementById('p2title').textContent = c.p2title;
+  document.getElementById('p2text').textContent = c.p2text;
+  document.getElementById('p3title').textContent = c.p3title;
+  document.getElementById('p3text').textContent = c.p3text;
+  document.getElementById('examplesLabel').textContent = c.examplesLabel;
+  document.getElementById('examplesTitle').textContent = c.examplesTitle;
+  document.getElementById('c1title').textContent = c.c1title;
+  document.getElementById('c1text').textContent = c.c1text;
+  document.getElementById('c1hint').textContent = c.c1hint;
+  document.getElementById('c2title').textContent = c.c2title;
+  document.getElementById('c2text').textContent = c.c2text;
+  document.getElementById('c2hint').textContent = c.c2hint;
+  document.getElementById('c3title').textContent = c.c3title;
+  document.getElementById('c3text').textContent = c.c3text;
+  document.getElementById('c3hint').textContent = c.c3hint;
+  document.getElementById('c4title').textContent = c.c4title;
+  document.getElementById('c4text').textContent = c.c4text;
+  document.getElementById('c4hint').textContent = c.c4hint;
+  document.getElementById('ctaTitle').textContent = c.ctaTitle;
+  document.getElementById('ctaText').textContent = c.ctaText;
+  document.getElementById('a1').textContent = c.a1;
+  document.getElementById('a2').textContent = c.a2;
+  document.getElementById('a3').textContent = c.a3;
+  document.getElementById('a4').textContent = c.a4;
+  document.getElementById('a5').textContent = c.a5;
+  document.getElementById('a6').textContent = c.a6;
+  document.querySelectorAll('.listenWord').forEach(el => el.textContent = c.listenWord);
+  document.getElementById('qrBadge').textContent = c.qrBadge;
+  document.getElementById('qrTitle').textContent = c.qrTitle;
+  document.getElementById('qrText').textContent = c.qrText;
+  document.getElementById('step1').textContent = c.step1;
+  document.getElementById('step2').textContent = c.step2;
+  document.getElementById('step3').textContent = c.step3;
+  document.getElementById('qrSpeakBtn').textContent = c.qrSpeakBtn;
+  document.getElementById('qrScan').textContent = c.qrScan;
+  document.getElementById('qrCamera').textContent = c.qrCamera;
+  document.getElementById('footerAudio').textContent = c.footerAudio;
+
+  stopSpeaking();
+}
+
+// ─── SPEECH ──────────────────────────────────────────────────────────────────
+function speakText(key) {
+  const c = content[currentLang];
+  const text = c.scripts[key];
+  if (!text) return;
+
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = c.lang;
+    utterance.rate = 0.88;
+    utterance.pitch = 1.0;
+    utterance.volume = 1.0;
+
+    // Pick best voice for language
+    const voices = window.speechSynthesis.getVoices();
+    const preferred = voices.find(v => v.lang.startsWith(currentLang === 'fr' ? 'fr' : 'en') && (v.name.includes('Google') || v.name.includes('Natural') || v.name.includes('Samantha') || v.name.includes('Thomas') || v.name.includes('Amelie')));
+    if (preferred) utterance.voice = preferred;
+
+    const label = currentLang === 'fr' ? 'En cours…' : 'Speaking…';
+    document.getElementById('speakingLabel').textContent = label;
+    document.getElementById('speakingIndicator').classList.add('active');
+
+    utterance.onend = () => document.getElementById('speakingIndicator').classList.remove('active');
+    utterance.onerror = () => document.getElementById('speakingIndicator').classList.remove('active');
+
+    window.speechSynthesis.speak(utterance);
+  } else {
+    alert(currentLang === 'fr' ? 'Votre navigateur ne supporte pas la voix. Essayez Chrome ou Safari.' : 'Your browser does not support voice. Please try Chrome or Safari.');
+  }
+}
+
+function stopSpeaking() {
+  window.speechSynthesis.cancel();
+  document.getElementById('speakingIndicator').classList.remove('active');
+}
+
+window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+
+// ─── QR CODE ─────────────────────────────────────────────────────────────────
+window.addEventListener('load', function() {
+  const canvas = document.getElementById('qrCanvas');
+  const shareURL = window.location.href && !window.location.href.startsWith('file') ? window.location.href : 'ONE HEALTH — Share this file via WhatsApp or Bluetooth';
+  const script = document.createElement('script');
+  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js';
+  script.onload = function() {
+    new QRious({ element: canvas, value: shareURL, size: 180, foreground: '#1a1a1a', background: '#ffffff', level: 'H', padding: 10 });
+  };
+  document.head.appendChild(script);
+});
+</script>
+</body>
+</html>
